@@ -1,23 +1,604 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<title>命運之書（網站版）</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>命運之書 Tarot Chronicle</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── 在這裡填入你的 Gemini API Key ── */
+/* 不需要在這裡改，開啟頁面後會有輸入框 */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1420;--parchment:#f5ede0;--gold:#c9a84c;--gold-dim:#8a6e32;
+  --rose:#8b4557;--mist:#6b7fa3;--card-light:#f7f0e4;
+}
+html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',serif;color:var(--parchment);-webkit-tap-highlight-color:transparent;}
+
+/* ── SCREENS ── */
+.screen{
+  display:none;flex-direction:column;align-items:center;
+  min-height:100vh;padding:28px 16px 60px;
+  max-width:480px;margin:0 auto;position:relative;
+}
+.screen.active{display:flex;}
+
+/* ── INTRO ── */
+#s-intro{justify-content:center;overflow:hidden;}
+.intro-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 30%,#2a1f3d 0%,#0d0a14 70%);
+  z-index:0;
+}
+.intro-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(201,168,76,.07) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.intro-inner{position:relative;z-index:1;text-align:center;}
+.ornament{color:var(--gold);letter-spacing:12px;font-size:13px;margin-bottom:24px;opacity:.6;}
+.big-title{
+  font-family:'Cinzel',serif;font-size:44px;color:var(--gold);
+  text-shadow:0 0 40px rgba(201,168,76,.6);letter-spacing:6px;margin-bottom:4px;
+}
+.big-sub{font-size:12px;color:var(--mist);letter-spacing:8px;margin-bottom:36px;}
+.intro-desc{font-size:15px;line-height:2;color:var(--parchment);opacity:.75;margin-bottom:44px;}
+
+/* ── API KEY SCREEN ── */
+#s-apikey{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);justify-content:center;}
+.apikey-logo{text-align:center;margin-bottom:32px;}
+.apikey-box{
+  width:100%;background:rgba(245,237,224,.04);
+  border:1px solid rgba(201,168,76,.22);border-radius:10px;
+  padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.apikey-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);letter-spacing:3px;}
+.apikey-steps{font-size:13px;color:var(--mist);line-height:2;text-align:left;width:100%;}
+.apikey-steps b{color:var(--parchment);opacity:.9;}
+.apikey-steps a{color:var(--gold);text-decoration:none;}
+.key-input{
+  width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);
+  border-radius:4px;padding:13px 14px;color:var(--parchment);
+  font-family:monospace;font-size:13px;outline:none;transition:border .2s;
+  -webkit-appearance:none;
+}
+.key-input:focus{border-color:var(--gold);}
+.key-input::placeholder{opacity:.3;font-family:'Noto Serif TC',serif;}
+.key-note{font-size:11px;color:var(--mist);opacity:.55;letter-spacing:1px;text-align:center;}
+
+/* ── BUTTONS ── */
+.btn{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  color:var(--ink);border:none;padding:14px 36px;
+  font-family:'Noto Serif TC',serif;font-size:15px;font-weight:600;
+  border-radius:3px;cursor:pointer;letter-spacing:2px;
+  box-shadow:0 4px 20px rgba(201,168,76,.3);transition:transform .15s,opacity .15s;
+  width:100%;max-width:300px;margin:5px 0;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  -webkit-appearance:none;
+}
+.btn:active{transform:scale(.97);}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn-ghost{
+  background:transparent;color:var(--parchment);
+  border:1px solid rgba(245,237,224,.22);padding:12px 28px;
+  font-family:'Noto Serif TC',serif;font-size:14px;border-radius:3px;
+  cursor:pointer;letter-spacing:2px;transition:all .2s;
+  width:100%;max-width:300px;margin:5px 0;opacity:.75;
+  -webkit-appearance:none;
+}
+.btn-ghost:active{opacity:1;background:rgba(255,255,255,.05);}
+.btn-rose{
+  background:linear-gradient(135deg,var(--rose),#5c2a39);color:var(--parchment);
+  border:none;padding:14px 36px;font-family:'Noto Serif TC',serif;
+  font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;
+  letter-spacing:2px;box-shadow:0 4px 24px rgba(139,69,87,.4);
+  transition:transform .15s;width:100%;max-width:300px;margin-top:28px;
+  -webkit-appearance:none;
+}
+.btn-rose:active{transform:scale(.97);}
+.btn-warn{
+  background:rgba(139,69,87,.2);color:var(--parchment);
+  border:1px solid rgba(139,69,87,.4);padding:9px 22px;
+  font-family:'Noto Serif TC',serif;font-size:13px;border-radius:3px;
+  cursor:pointer;letter-spacing:2px;margin:5px 4px;
+  -webkit-appearance:none;
+}
+
+/* ── WORLD ── */
+#s-world{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);}
+.screen-header{text-align:center;margin-bottom:24px;width:100%;}
+.screen-title{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);letter-spacing:4px;margin-bottom:6px;}
+.screen-hint{font-size:13px;color:var(--mist);letter-spacing:2px;}
+.world-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
+.world-btn{
+  background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);
+  color:var(--parchment);padding:18px 8px;
+  font-family:'Noto Serif TC',serif;font-size:14px;letter-spacing:1px;
+  border-radius:4px;cursor:pointer;transition:all .2s;line-height:1.6;
+  -webkit-appearance:none;
+}
+.world-btn:active{background:rgba(201,168,76,.18);border-color:var(--gold);}
+
+/* ── DRAW ── */
+#s-draw,#s-loading{justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e1530 0%,#0d0a14 80%);}
+.top-bar{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:8px;}
+.round-badge{font-size:11px;color:var(--gold);border:1px solid var(--gold-dim);padding:4px 12px;letter-spacing:3px;border-radius:2px;}
+.world-chip{font-size:12px;color:var(--mist);letter-spacing:2px;}
+.cards-row{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.cards-row.small{transform:scale(.75);transform-origin:top center;height:108px;margin-bottom:0;}
+.draw-hint{font-size:13px;color:var(--mist);letter-spacing:3px;text-align:center;margin-top:8px;animation:pulse 1.5s infinite;}
+
+/* ── CARD ── */
+.card-wrap{animation:cardAppear .45s ease both;}
+@keyframes cardAppear{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.card{width:90px;height:144px;position:relative;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1);}
+.card.revealed{transform:rotateY(180deg);}
+.card.reversed.revealed{transform:rotateY(180deg) rotate(180deg);}
+.card-back,.card-front{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:7px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;border:1px solid var(--gold-dim);
+}
+.card-back{background:linear-gradient(145deg,#1e1530,#2a1f3d);}
+.card-glyph{font-size:26px;color:var(--gold);opacity:.22;}
+.card-front{background:linear-gradient(160deg,#f7f0e4,#e8d8c4);transform:rotateY(180deg);color:var(--ink);gap:6px;padding:8px;}
+.card-symbol{font-size:28px;}
+.card-name{font-size:10.5px;font-weight:600;text-align:center;letter-spacing:1px;color:#3a2a1a;}
+.card-orient{font-size:9px;color:var(--rose);letter-spacing:1px;}
+
+/* ── LOADING ── */
+.loading-block{text-align:center;padding:32px 0;color:var(--mist);font-size:13px;letter-spacing:2px;}
+.dots{display:flex;gap:7px;justify-content:center;margin-bottom:16px;}
+.dots span{width:8px;height:8px;border-radius:50%;background:var(--gold);opacity:.4;animation:dotPulse 1.3s infinite;}
+.dots span:nth-child(2){animation-delay:.22s;}
+.dots span:nth-child(3){animation-delay:.44s;}
+@keyframes dotPulse{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+/* ── STORY ── */
+#s-story{background:radial-gradient(ellipse at 50% 10%,#1a1428 0%,#0d0a14 80%);}
+.story-block{
+  background:rgba(245,237,224,.04);border:1px solid rgba(201,168,76,.17);
+  border-radius:8px;padding:20px 16px;margin-bottom:16px;width:100%;min-height:80px;
+}
+.story-text{font-size:15px;line-height:2.2;color:var(--parchment);opacity:.92;white-space:pre-wrap;letter-spacing:.3px;}
+.cursor{display:inline-block;animation:blink .75s step-end infinite;color:var(--gold);margin-left:1px;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.action-row{display:flex;flex-direction:column;align-items:center;width:100%;gap:4px;}
+.round-count{font-size:11px;opacity:.65;font-weight:400;}
+
+/* ── ERROR ── */
+.error-block{
+  width:100%;background:rgba(139,69,87,.1);border:1px solid rgba(139,69,87,.28);
+  border-radius:8px;padding:20px 16px;text-align:center;margin-bottom:14px;
+}
+.error-icon{font-size:20px;color:var(--rose);margin-bottom:8px;}
+.error-text{font-size:12px;color:var(--parchment);opacity:.8;line-height:1.9;word-break:break-all;font-family:monospace;}
+.error-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
+
+/* ── EVENT ── */
+#s-event{justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 40%,#2a0f1a 0%,#0d0a14 80%);}
+.event-alert{font-size:11px;letter-spacing:6px;color:var(--rose);border:1px solid var(--rose);padding:4px 16px;border-radius:2px;margin-bottom:16px;}
+.event-title{font-family:'Cinzel',serif;font-size:26px;color:var(--parchment);letter-spacing:3px;margin-bottom:12px;}
+.event-desc{font-size:14px;line-height:2;color:var(--mist);margin-bottom:32px;}
+
+/* ── END ── */
+#s-end{justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 30%,#1a1428 0%,#0d0a14 80%);}
+.end-ornament{font-size:32px;color:var(--gold);margin-bottom:16px;opacity:.45;}
+.end-title{font-family:'Cinzel',serif;font-size:30px;color:var(--gold);letter-spacing:5px;margin-bottom:6px;}
+.end-sub{font-size:12px;color:var(--mist);letter-spacing:3px;margin-bottom:20px;}
+.end-hint{font-size:13px;color:var(--mist);line-height:2.1;margin:20px 0;opacity:.6;}
+
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+</style>
 </head>
 <body>
-<h2>命運之書</h2>
-<button onclick="go()">生成故事</button>
-<pre id="out"></pre>
+
+<!-- ══ API KEY ══════════════════════════════════════════════════════ -->
+<div id="s-apikey" class="screen active">
+  <div class="apikey-logo">
+    <div class="ornament">✦ ✦ ✦</div>
+    <h1 class="big-title">命運之書</h1>
+    <p class="big-sub">Tarot Chronicle</p>
+  </div>
+  <div class="apikey-box">
+    <p class="apikey-title">輸入 Gemini API Key</p>
+    <div class="apikey-steps">
+      <b>申請方式（免費）：</b><br/>
+      1. 開啟 <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a><br/>
+      2. 左側點「Get API key」<br/>
+      3. 點「Create API key」<br/>
+      4. 複製 <code style="background:rgba(255,255,255,.08);padding:2px 5px;border-radius:3px;">AIza...</code> 開頭的文字貼入下方
+    </div>
+    <input id="key-input" class="key-input" type="password" placeholder="AIza..."/>
+    <p class="key-note">Key 僅存於本機記憶體，不會上傳</p>
+    <button class="btn" id="key-confirm" disabled onclick="confirmKey()">開始</button>
+  </div>
+</div>
+
+<!-- ══ INTRO ════════════════════════════════════════════════════════ -->
+<div id="s-intro" class="screen">
+  <div class="intro-bg"></div>
+  <div class="intro-inner">
+    <div class="ornament">✦ ✦ ✦</div>
+    <h1 class="big-title">命運之書</h1>
+    <p class="big-sub">Tarot Chronicle</p>
+    <p class="intro-desc">抽出三張塔羅牌<br/>讓命運編織屬於你的故事</p>
+    <button class="btn" onclick="goto('s-world')">開啟命運之書</button>
+    <button class="btn-ghost" onclick="goto('s-apikey')" style="margin-top:4px">更換 API Key</button>
+  </div>
+</div>
+
+<!-- ══ WORLD ════════════════════════════════════════════════════════ -->
+<div id="s-world" class="screen">
+  <div class="screen-header">
+    <p class="screen-title">選擇世界觀</p>
+    <p class="screen-hint">故事將在此舞台展開</p>
+  </div>
+  <div class="world-grid" id="world-grid"></div>
+</div>
+
+<!-- ══ DRAW ═════════════════════════════════════════════════════════ -->
+<div id="s-draw" class="screen">
+  <div class="top-bar">
+    <span class="round-badge" id="draw-round">第 1 回合</span>
+    <span class="world-chip" id="draw-world"></span>
+  </div>
+  <div class="cards-row" id="draw-cards"></div>
+  <p class="draw-hint" id="draw-hint">命運之牌正在展開……</p>
+</div>
+
+<!-- ══ LOADING ══════════════════════════════════════════════════════ -->
+<div id="s-loading" class="screen">
+  <div class="top-bar">
+    <span class="round-badge" id="load-round"></span>
+    <span class="world-chip" id="load-world"></span>
+  </div>
+  <div class="cards-row small" id="load-cards"></div>
+  <div class="loading-block">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <p id="load-msg">說書人執筆中……</p>
+  </div>
+</div>
+
+<!-- ══ STORY ════════════════════════════════════════════════════════ -->
+<div id="s-story" class="screen">
+  <div class="top-bar">
+    <span class="round-badge" id="story-round"></span>
+    <span class="world-chip" id="story-world"></span>
+  </div>
+  <div class="cards-row small" id="story-cards"></div>
+  <div id="error-block" class="error-block" style="display:none">
+    <div class="error-icon">⚠</div>
+    <p class="error-text" id="error-text"></p>
+    <div class="error-btns">
+      <button class="btn-warn" onclick="retryGenerate()">重試</button>
+      <button class="btn-warn" onclick="goto('s-apikey')">換 Key</button>
+    </div>
+  </div>
+  <div id="story-block" class="story-block" style="display:none">
+    <p class="story-text" id="story-text"></p>
+  </div>
+  <div id="action-row" class="action-row" style="display:none">
+    <button class="btn" id="btn-continue" onclick="handleContinue()">繼續故事</button>
+    <button class="btn-ghost" onclick="newGame()">開啟新局</button>
+  </div>
+  <button class="btn-ghost" id="btn-newgame-err" style="display:none;margin-top:8px" onclick="newGame()">開啟新局</button>
+</div>
+
+<!-- ══ EVENT ════════════════════════════════════════════════════════ -->
+<div id="s-event" class="screen">
+  <div class="event-alert">⚠ 命運干涉</div>
+  <h2 class="event-title">重大事件降臨</h2>
+  <p class="event-desc">前方潛藏著改變一切的命運節點<br/>抽出一張牌，看清它的真面目</p>
+  <div id="event-card-wrap"></div>
+  <button class="btn-rose" id="btn-event" onclick="handleEventBtn()">揭示命運之牌</button>
+</div>
+
+<!-- ══ END ══════════════════════════════════════════════════════════ -->
+<div id="s-end" class="screen">
+  <div class="end-ornament">✦</div>
+  <h2 class="end-title">故事落幕</h2>
+  <p class="end-sub">命運之書已完成六個篇章</p>
+  <div id="end-story" class="story-block" style="margin-bottom:12px;display:none">
+    <p class="story-text" id="end-story-text"></p>
+  </div>
+  <p class="end-hint">月永雷歐與瀨名泉的故事<br/>將繼續在記憶中流轉……</p>
+  <button class="btn" onclick="fullReset()">重新開始</button>
+</div>
 
 <script>
-async function go(){
-  const res = await fetch("/api/generate",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({prompt:"寫一段奇幻故事"})
+// ══ DATA ══════════════════════════════════════════════════════════════════════
+const MAJOR = [
+  [0,"愚者","🌟"],[1,"魔術師","✨"],[2,"女祭司","🌙"],[3,"女皇","🌿"],
+  [4,"皇帝","👑"],[5,"教皇","⛪"],[6,"戀人","💫"],[7,"戰車","⚔️"],
+  [8,"力量","🦁"],[9,"隱者","🕯️"],[10,"命運之輪","☯️"],[11,"正義","⚖️"],
+  [12,"吊人","🔮"],[13,"死神","🌑"],[14,"節制","🌊"],[15,"惡魔","🔥"],
+  [16,"塔","⚡"],[17,"星星","⭐"],[18,"月亮","🌕"],[19,"太陽","☀️"],
+  [20,"審判","🎺"],[21,"世界","🌍"],
+].map(([id,name,symbol])=>({id,name,symbol,display:name}));
+
+const SUITS=[{s:"聖杯",y:"🏺"},{s:"寶劍",y:"🗡️"},{s:"權杖",y:"🔱"},{s:"星幣",y:"🪙"}];
+const RANKS=["A","2","3","4","5","6","7","8","9","10","侍從","騎士","皇后","國王"];
+const MINOR=SUITS.flatMap(({s,y})=>RANKS.map(r=>({id:`${s}-${r}`,name:`${r}${s}`,symbol:y,display:`${r}${s}`})));
+const ALL_CARDS=[...MAJOR,...MINOR];
+
+const WORLDS=["現代都市奇幻","維多利亞蒸汽龐克","東方水墨仙俠","星際科幻","末日廢土","洛可可宮廷","北歐神話","賽博龐克霓虹"];
+const CHAR_A={name:"月永雷歐",trait:"冷靜而神秘，眼神深邃如星夜"};
+const CHAR_B={name:"瀨名泉",trait:"溫柔而堅毅，笑容如春日暖陽"};
+
+// ══ STATE ════════════════════════════════════════════════════════════════════
+let apiKey="";
+let world="";
+let round=0,totalRounds=0,continueCount=0;
+let cards=[],eventCard=null;
+let fullStory="",prevStory="";
+let isEventStory=false;
+let eventRevealed=false;
+let pendingIsEvent=false,pendingEc=null;
+let typeTimer=null;
+
+// ══ HELPERS ══════════════════════════════════════════════════════════════════
+function goto(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function drawCards(n){
+  return [...ALL_CARDS].sort(()=>Math.random()-.5).slice(0,n)
+    .map(c=>({...c,reversed:Math.random()>.6}));
+}
+
+function cardHTML(card,revealed=true){
+  return `<div class="card-wrap">
+    <div class="card${revealed?' revealed':''}${card.reversed?' reversed':''}">
+      <div class="card-back"><span class="card-glyph">✦</span></div>
+      <div class="card-front">
+        <div class="card-symbol">${card.symbol}</div>
+        <div class="card-name">${card.display}</div>
+        <div class="card-orient">${card.reversed?'逆位':'正位'}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildPrompt(isEvent,ec){
+  const cardDesc=cards.map(c=>`【${c.display}${c.reversed?'（逆位）':'（正位）'}】`).join('、');
+  return `你是一位擅長寫故事的說書人。請根據以下設定，用繁體中文寫出一段約150字的短篇故事片段。
+
+世界觀：${world}
+主角：${CHAR_A.name}（${CHAR_A.trait}）與${CHAR_B.name}（${CHAR_B.trait}）
+本次塔羅牌：${cardDesc}　第${round}回合
+
+要求：以塔羅牌象徵意義推動劇情、有具體場景與對話、結尾留下懸念或情緒餘韻、語氣帶詩意但不過度修飾。
+${prevStory?`延續此前故事：「${prevStory.slice(0,80)}……」`:'這是全新的故事開端。'}
+${isEvent?`\n⚠️重大事件！事件牌：【${ec.display}${ec.reversed?'逆位':'正位'}】請加入突發危機，結尾加一行：「＊化解之道：……（一句話）」`:''}
+
+只輸出故事本文，不加任何標題或說明。`;
+}
+
+// ══ TYPEWRITER ════════════════════════════════════════════════════════════════
+function typewrite(text, el, onDone){
+  clearTimeout(typeTimer);
+  el.innerHTML='';
+  let i=0;
+  function tick(){
+    i+=Math.floor(Math.random()*3)+1;
+    el.innerHTML=text.slice(0,i)+'<span class="cursor">▋</span>';
+    if(i>=text.length){
+      el.innerHTML=text;
+      if(onDone) onDone();
+      return;
+    }
+    typeTimer=setTimeout(tick, 18+Math.random()*12);
+  }
+  tick();
+}
+
+// ══ API KEY ═══════════════════════════════════════════════════════════════════
+document.getElementById('key-input').addEventListener('input',function(){
+  document.getElementById('key-confirm').disabled=!this.value.startsWith('AIza');
+});
+document.getElementById('key-input').addEventListener('keydown',function(e){
+  if(e.key==='Enter' && this.value.startsWith('AIza')) confirmKey();
+});
+function confirmKey(){
+  apiKey=document.getElementById('key-input').value.trim();
+  goto('s-intro');
+}
+
+// ══ WORLD ════════════════════════════════════════════════════════════════════
+const wg=document.getElementById('world-grid');
+WORLDS.forEach(w=>{
+  const b=document.createElement('button');
+  b.className='world-btn'; b.textContent=w;
+  b.onclick=()=>startDraw(w,false);
+  wg.appendChild(b);
+});
+
+// ══ DRAW SEQUENCE ════════════════════════════════════════════════════════════
+function startDraw(newWorld, continueStory){
+  if(newWorld) world=newWorld;
+  cards=drawCards(3);
+  round++; totalRounds++;
+  if(!continueStory) prevStory='';
+  fullStory='';
+
+  // update draw screen
+  document.getElementById('draw-round').textContent=`第 ${round} 回合`;
+  document.getElementById('draw-world').textContent=`✦ ${world}`;
+  const dc=document.getElementById('draw-cards');
+  dc.innerHTML=cards.map(()=>`<div class="card-wrap"><div class="card"><div class="card-back"><span class="card-glyph">✦</span></div><div class="card-front"></div></div></div>`).join('');
+  document.getElementById('draw-hint').textContent='命運之牌正在展開……';
+  goto('s-draw');
+
+  // reveal cards one by one
+  const cardEls=dc.querySelectorAll('.card');
+  let i=0;
+  function revealNext(){
+    if(i<cards.length){
+      const c=cards[i];
+      const front=cardEls[i].querySelector('.card-front');
+      front.innerHTML=`<div class="card-symbol">${c.symbol}</div><div class="card-name">${c.display}</div><div class="card-orient">${c.reversed?'逆位':'正位'}</div>`;
+      cardEls[i].classList.add('revealed');
+      if(c.reversed) cardEls[i].classList.add('reversed');
+      i++;
+      setTimeout(revealNext,600);
+    } else {
+      document.getElementById('draw-hint').textContent='說書人正在凝視命運……';
+      setTimeout(()=>runGenerate(false,null),400);
+    }
+  }
+  setTimeout(revealNext,300);
+}
+
+// ══ GENERATE ═════════════════════════════════════════════════════════════════
+function showLoading(isEvent){
+  document.getElementById('load-round').textContent=isEvent?'⚠️ 重大事件':`第 ${round} 回合`;
+  document.getElementById('load-world').textContent=`✦ ${world}`;
+  document.getElementById('load-cards').innerHTML=cards.map(c=>cardHTML(c)).join('');
+  document.getElementById('load-msg').textContent='說書人執筆中……';
+  goto('s-loading');
+}
+
+async function runGenerate(isEvent, ec, attempt=0){
+  isEventStory=isEvent;
+  pendingIsEvent=isEvent; pendingEc=ec;
+  showLoading(isEvent);
+
+  const prompt=buildPrompt(isEvent,ec);
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+  let res,data;
+  try {
+    const controller=new AbortController();
+    const tid=setTimeout(()=>controller.abort(),20000);
+    res=await fetch(url,{
+      method:'POST',
+      signal:controller.signal,
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
+    });
+    clearTimeout(tid);
+    data=await res.json();
+  } catch(e){
+    const msg=e.name==='AbortError'?'連線逾時（20秒），請重試':`網路錯誤：${e.message}`;
+    if(attempt<1){
+      document.getElementById('load-msg').textContent='重新連線中……';
+      setTimeout(()=>runGenerate(isEvent,ec,attempt+1),1500);
+    } else showError(msg);
+    return;
+  }
+
+  if(!res.ok){
+    const msg=data?.error?.message||`HTTP ${res.status}`;
+    if(attempt<1){
+      document.getElementById('load-msg').textContent='重新連線中……';
+      setTimeout(()=>runGenerate(isEvent,ec,attempt+1),1500);
+    } else showError(`API 錯誤 ${res.status}：${msg}`);
+    return;
+  }
+
+  const text=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(!text){ showError(`回應格式異常：${JSON.stringify(data).slice(0,200)}`); return; }
+
+  fullStory=text;
+  showStory(isEvent);
+}
+
+function retryGenerate(){ runGenerate(pendingIsEvent,pendingEc,0); }
+
+// ══ SHOW STORY ════════════════════════════════════════════════════════════════
+function showStory(isEvent){
+  document.getElementById('story-round').textContent=isEvent?'⚠️ 重大事件':`第 ${round} 回合`;
+  document.getElementById('story-world').textContent=`✦ ${world}`;
+  document.getElementById('story-cards').innerHTML=cards.map(c=>cardHTML(c)).join('');
+  document.getElementById('error-block').style.display='none';
+  document.getElementById('action-row').style.display='none';
+  document.getElementById('btn-newgame-err').style.display='none';
+
+  const sb=document.getElementById('story-block');
+  const st=document.getElementById('story-text');
+  sb.style.display='block';
+  goto('s-story');
+
+  typewrite(fullStory, st, ()=>{
+    // update continue button
+    const bc=document.getElementById('btn-continue');
+    bc.innerHTML=totalRounds<6?`繼續故事　<span class="round-count">${totalRounds}/6</span>`:'故事落幕';
+    document.getElementById('action-row').style.display='flex';
   });
-  const data = await res.json();
-  document.getElementById("out").textContent = data.text || JSON.stringify(data);
+}
+
+function showError(msg){
+  document.getElementById('story-round').textContent=isEventStory?'⚠️ 重大事件':`第 ${round} 回合`;
+  document.getElementById('story-world').textContent=`✦ ${world}`;
+  document.getElementById('story-cards').innerHTML=cards.map(c=>cardHTML(c)).join('');
+  document.getElementById('error-text').textContent=msg;
+  document.getElementById('error-block').style.display='block';
+  document.getElementById('story-block').style.display='none';
+  document.getElementById('action-row').style.display='none';
+  document.getElementById('btn-newgame-err').style.display='flex';
+  goto('s-story');
+}
+
+// ══ CONTINUE / NEW GAME ════════════════════════════════════════════════════════
+function handleContinue(){
+  if(totalRounds>=6){ showEnd(); return; }
+  if(continueCount>=2){
+    eventCard=drawCards(1)[0];
+    eventRevealed=false;
+    prevStory=fullStory;
+    showEventDraw();
+    continueCount=0;
+  } else {
+    prevStory=fullStory;
+    continueCount++;
+    startDraw(null,true);
+  }
+}
+
+function newGame(){
+  round=0; totalRounds=0; continueCount=0;
+  prevStory=''; fullStory=''; eventCard=null;
+  goto('s-world');
+}
+
+function fullReset(){
+  round=0; totalRounds=0; continueCount=0; world='';
+  prevStory=''; fullStory=''; eventCard=null;
+  goto('s-intro');
+}
+
+// ══ EVENT ════════════════════════════════════════════════════════════════════
+function showEventDraw(){
+  const wrap=document.getElementById('event-card-wrap');
+  wrap.innerHTML=cardHTML(eventCard,false);
+  document.getElementById('btn-event').textContent='揭示命運之牌';
+  eventRevealed=false;
+  goto('s-event');
+}
+
+function handleEventBtn(){
+  if(!eventRevealed){
+    eventRevealed=true;
+    const wrap=document.getElementById('event-card-wrap');
+    wrap.innerHTML=cardHTML(eventCard,true);
+    document.getElementById('btn-event').textContent='面對命運';
+  } else {
+    runGenerate(true,eventCard,0);
+  }
+}
+
+// ══ END ══════════════════════════════════════════════════════════════════════
+function showEnd(){
+  if(fullStory){
+    document.getElementById('end-story-text').textContent=fullStory;
+    document.getElementById('end-story').style.display='block';
+  }
+  goto('s-end');
 }
 </script>
 </body>
