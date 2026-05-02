@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>命運之書（網站版）</title>
+</head>
+<body>
+<h2>命運之書</h2>
+<button onclick="go()">生成故事</button>
+<pre id="out"></pre>
+
+<script>
+async function go(){
+  const res = await fetch("/api/generate",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({prompt:"寫一段奇幻故事"})
+  });
+  const data = await res.json();
+  document.getElementById("out").textContent = data.text || JSON.stringify(data);
+}
+</script>
+</body>
+</html>
