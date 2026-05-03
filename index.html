@@ -58,14 +58,66 @@ max-width:480px;margin:0 auto;position:relative;
 .btn-prev{background:transparent;color:#6b7fa3;-webkit-text-fill-color:#6b7fa3;border:1px solid rgba(107,127,163,.3);padding:8px 20px;font-family:‘Noto Serif TC’,serif;font-size:12px;border-radius:3px;cursor:pointer;letter-spacing:2px;transition:all .2s;width:100%;max-width:300px;margin:2px 0;-webkit-appearance:none;}
 .btn-prev:active{color:#f5ede0;-webkit-text-fill-color:#f5ede0;border-color:rgba(107,127,163,.6);}
 
-/* ── WORLD ── */
-#s-world{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);}
-.screen-header{text-align:center;margin-bottom:24px;width:100%;}
-.screen-title{font-family:‘Cinzel’,serif;font-size:22px;color:var(–gold);letter-spacing:4px;margin-bottom:6px;}
+/* ── WORLD BOOK ── */
+#s-world{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);padding:20px 0 60px;align-items:center;overflow:hidden;}
+.book-header{text-align:center;margin-bottom:18px;width:100%;padding:0 16px;}
+.screen-title{font-family:'Cinzel',serif;font-size:22px;color:var(–gold);letter-spacing:4px;margin-bottom:6px;}
 .screen-hint{font-size:13px;color:var(–mist);letter-spacing:2px;}
-.world-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
-.world-btn{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);color:#f5ede0;-webkit-text-fill-color:#f5ede0;padding:18px 8px;font-family:‘Noto Serif TC’,serif;font-size:14px;letter-spacing:1px;border-radius:4px;cursor:pointer;transition:all .2s;line-height:1.6;-webkit-appearance:none;}
-.world-btn:active{background:rgba(201,168,76,.18);border-color:var(–gold);}
+.book-outer{width:100%;max-width:420px;padding:0 12px;perspective:1200px;}
+.book-spine{
+  position:relative;
+  background:linear-gradient(160deg,#2b1f12 0%,#1c1309 55%,#2b1f12 100%);
+  border-radius:3px 12px 12px 3px;
+  box-shadow:-4px 0 0 #0d0a06,-7px 0 0 #1a1208,5px 10px 36px rgba(0,0,0,.65),inset 3px 0 10px rgba(201,168,76,.07);
+  overflow:hidden;min-height:380px;transform-style:preserve-3d;
+}
+.book-spine::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:repeating-linear-gradient(180deg,transparent 0px,transparent 31px,rgba(201,168,76,.035) 31px,rgba(201,168,76,.035) 32px);
+  pointer-events:none;z-index:0;
+}
+.book-spine::after{
+  content:'';position:absolute;top:0;left:0;bottom:0;width:20px;
+  background:linear-gradient(90deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.15) 60%,transparent 100%);
+  pointer-events:none;z-index:1;
+}
+.book-top{
+  position:relative;z-index:2;padding:16px 20px 10px 28px;
+  border-bottom:1px solid rgba(201,168,76,.16);display:flex;align-items:center;gap:10px;
+}
+.book-icon{font-size:17px;opacity:.5;}
+.book-top-text{font-family:'Cinzel',serif;font-size:10px;color:var(–gold);letter-spacing:3px;opacity:.6;}
+.world-entries{position:relative;z-index:2;padding:4px 0;}
+.world-entry{
+  display:flex;align-items:stretch;
+  border-bottom:1px solid rgba(201,168,76,.07);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  position:relative;overflow:hidden;transition:background .15s;
+}
+.world-entry:active{background:rgba(201,168,76,.06);}
+.entry-num{
+  width:42px;min-width:42px;display:flex;align-items:center;justify-content:center;
+  padding:15px 0;font-family:'Cinzel',serif;font-size:9px;
+  color:var(–gold);opacity:.3;letter-spacing:1px;
+  border-right:1px solid rgba(201,168,76,.09);flex-shrink:0;
+}
+.entry-body{flex:1;padding:14px 12px 14px 18px;display:flex;flex-direction:column;justify-content:center;}
+.entry-title{font-family:'Noto Serif TC',serif;font-size:14px;color:var(–parchment);letter-spacing:1.5px;margin-bottom:3px;opacity:.93;}
+.entry-tag{font-size:9.5px;color:var(–mist);letter-spacing:2px;opacity:.5;}
+.entry-arrow{width:34px;display:flex;align-items:center;justify-content:center;color:var(–gold);font-size:11px;opacity:.25;flex-shrink:0;}
+@keyframes pageFlip{
+  0%{transform:rotateY(0deg) translateX(0);filter:brightness(1);}
+  40%{transform:rotateY(-22deg) translateX(-16px);filter:brightness(.65);}
+  60%{transform:rotateY(-22deg) translateX(-16px);filter:brightness(.65);}
+  100%{transform:rotateY(0deg) translateX(0);filter:brightness(1);}
+}
+.book-spine.flipping{animation:pageFlip .5s cubic-bezier(.4,0,.2,1);}
+.book-bottom{
+  position:relative;z-index:2;padding:10px 20px 14px 28px;
+  border-top:1px solid rgba(201,168,76,.1);display:flex;align-items:center;justify-content:space-between;
+}
+.book-page-num{font-family:'Cinzel',serif;font-size:9px;color:var(–gold);opacity:.25;letter-spacing:2px;}
+.book-seal{font-size:13px;opacity:.12;}
 
 /* ── DRAW / LOADING ── */
 #s-draw,#s-loading{justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e1530 0%,#0d0a14 80%);}
@@ -194,16 +246,27 @@ display:none;
   </div>
 </div>
 
-<!-- ══ WORLD ════════════════════════════════════════════════════════ -->
+<!-- ══ WORLD ═════════════════════════════════ -->
 
 <div id="s-world" class="screen">
-  <div class="screen-header">
+  <div class="book-header">
     <p class="screen-title">選擇世界觀</p>
-    <p class="screen-hint">故事將在此舞台展開</p>
+    <p class="screen-hint">翻開命運之書，加入該舞台</p>
   </div>
-  <div class="world-grid" id="world-grid"></div>
+  <div class="book-outer">
+    <div class="book-spine" id="book-spine">
+      <div class="book-top">
+        <span class="book-icon">&#128214;</span>
+        <span class="book-top-text">WORLD ARCHIVE</span>
+      </div>
+      <div class="world-entries" id="world-entries"></div>
+      <div class="book-bottom">
+        <span class="book-page-num">VOL. I</span>
+        <span class="book-seal">&#10038;</span>
+      </div>
+    </div>
+  </div>
 </div>
-
 <!-- ══ DRAW ═════════════════════════════════════════════════════════ -->
 
 <div id="s-draw" class="screen">
@@ -488,13 +551,32 @@ function confirmKey(){
   goto('s-intro');
 }
 
-// ══ WORLD ════════════════════════════════════════════════════════════════════
-const wg=document.getElementById('world-grid');
-WORLDS.forEach(w=>{
-  const b=document.createElement('button');
-  b.className='world-btn'; b.textContent=w;
-  b.onclick=()=>startDraw(w,false);
-  wg.appendChild(b);
+// ══ WORLD BOOK ═══════════════════════════════════════════════════════════════════════════
+const WORLD_TAGS={
+  '現代都市奇幻':'玄幻・都市','義大利黑手黨':'歷史・暗黑',
+  '耳廓狐與長筒靴貓':'奇幻・冒險','惡魔與偵探':'現代・超自然',
+  '馬戲團小丑及靈媒':'神秘・嘉年華','浪人與蛇妖':'歷史・妖怪',
+  '虎神與鹿神':'神話・東方','蝴蝶妖精':'幻境・童話',
+};
+const we=document.getElementById('world-entries');
+WORLDS.forEach((w,idx)=>{
+  const div=document.createElement('div');
+  div.className='world-entry';
+  const num=String(idx+1).padStart(2,'0');
+  div.innerHTML='<div class="entry-num">'+num+'</div>'
+    +'<div class="entry-body">'
+    +'<div class="entry-title">'+w+'</div>'
+    +'<div class="entry-tag">'+(WORLD_TAGS[w]||'')+'</div>'
+    +'</div>'
+    +'<div class="entry-arrow">›</div>';
+  div.onclick=function(){
+    const spine=document.getElementById('book-spine');
+    spine.classList.remove('flipping');
+    void spine.offsetWidth;
+    spine.classList.add('flipping');
+    setTimeout(function(){ startDraw(w,false); }, 260);
+  };
+  we.appendChild(div);
 });
 
 // ══ DRAW SEQUENCE ════════════════════════════════════════════════════════════
