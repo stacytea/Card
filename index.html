@@ -75,6 +75,8 @@ max-width:480px;margin:0 auto;position:relative;
 .cards-row{display:flex;gap:12px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
 .cards-row.small{transform:scale(.75);transform-origin:top center;height:108px;margin-bottom:0;}
 .draw-hint{font-size:13px;color:var(–mist);letter-spacing:3px;text-align:center;margin-top:8px;animation:pulse 1.5s infinite;}
+.card-role{font-size:10px;color:var(–gold);letter-spacing:2px;text-align:center;margin-top:6px;opacity:.7;}
+.card-wrap-labeled{display:flex;flex-direction:column;align-items:center;}
 
 /* ── CARD ── */
 .card-wrap{animation:cardAppear .45s ease both;}
@@ -352,21 +354,32 @@ function drawCards(n){
     .map(c=>({...c,reversed:Math.random()>.6}));
 }
 
-function cardHTML(card,revealed=true){
-  return `<div class="card-wrap">
-    <div class="card${revealed?' revealed':''}${card.reversed?' reversed':''}">
-      <div class="card-back"><span class="card-glyph">✦</span></div>
-      <div class="card-front">
-        <div class="card-symbol">${card.symbol}</div>
-        <div class="card-name">${card.display}</div>
-        <div class="card-orient">${card.reversed?'逆位':'正位'}</div>
+const CARD_ROLES=['場景','事件','情感'];
+
+function cardHTML(card,revealed=true,roleIndex=-1){
+  const roleLabel=roleIndex>=0?`<div class="card-role">${CARD_ROLES[roleIndex]}</div>`:'';
+  return `<div class="card-wrap-labeled">
+    <div class="card-wrap">
+      <div class="card${revealed?' revealed':''}${card.reversed?' reversed':''}">
+        <div class="card-back"><span class="card-glyph">✦</span></div>
+        <div class="card-front">
+          <div class="card-symbol">${card.symbol}</div>
+          <div class="card-name">${card.display}</div>
+          <div class="card-orient">${card.reversed?'逆位':'正位'}</div>
+        </div>
       </div>
     </div>
+    ${roleLabel}
   </div>`;
 }
 
 function buildPrompt(isEvent,ec){
-  const cardDesc=cards.map(c=>`【${c.display}${c.reversed?'（逆位）':'（正位）'}】`).join('、');
+  // 三張牌分角色
+  const [sceneCard, eventCardDraw, feelCard] = cards;
+  const cardDesc=
+    `【場景牌】${sceneCard.display}${sceneCard.reversed?'（逆位）':'（正位）'}——描繪這一幕發生的環境與氛圍\n` +
+    `【事件牌】${eventCardDraw.display}${eventCardDraw.reversed?'（逆位）':'（正位）'}——這一幕的核心衝突或行動\n` +
+    `【情感牌】${feelCard.display}${feelCard.reversed?'（逆位）':'（正位）'}——角色的內心狀態或關係變化`;
 
   // 傳入完整歷史（不截斷）
   const pastLogs=storyLog.slice(0,-1);
@@ -380,7 +393,7 @@ function buildPrompt(isEvent,ec){
 2. 角色的稱謂、關係、情緒狀態必須與歷史一致
 3. 不重複已出現過的場景、對話內容或意象
 4. 不重新介紹角色背景，讀者已知道他們是誰
-5. 本段塔羅牌作為命運的「推力」，用來推動劇情往下走，而非重置故事`
+5. 場景牌定調環境、事件牌推動情節、情感牌細膩刻畫心理，三者共同驅動敘事`
     : `【開場規則】
 建立世界觀氛圍與兩人的第一幕，作為整個故事的起點`;
 
@@ -391,16 +404,19 @@ function buildPrompt(isEvent,ec){
 【主角】
 - ${CHAR_A.name}：${CHAR_A.trait}
 - ${CHAR_B.name}：${CHAR_B.trait}
-【本回合塔羅牌】${cardDesc}（第 ${round} 回合）
+【故事調性】清甜日常為主，糖分優先——用細膩溫柔的筆觸捕捉兩人之間微小卻珍貴的日常瞬間，情感濃度適中，帶點甜蜜曖昧，不刻意製造痛苦
+【兩人關係】已有情愫但沒有捅破——雙方心知肚明卻誰都沒有說出口，用眼神、動作、說一半的話來傳遞感情，張力來自「差一點」的曖昧距離
+【本回合三張塔羅牌（第 ${round} 回合）】
+${cardDesc}
 ${historyBlock}
 ${continuationRules}
 
 【寫作格式】
 - 長度約150字，現代小說文體
-- 必須包含具體場景描寫與人物對話或內心獨白
+- 場景牌奠定環境畫面，事件牌帶動情節走向，情感牌收束於角色內心或關係細節
 - 塔羅牌的象徵自然融入（不要直接點名塔羅牌）
 - 結尾留下懸念或情緒餘韻，引導讀者期待下一段
-- 語氣詩意但不堆砌辭藻
+- 語氣詩意但不堆砌辭藻，甜而不膩
 ${isEvent?`
 【命運干涉】事件牌：【${ec.display}${ec.reversed?'逆位':'正位'}】
 在故事中製造一個突發危機或重大轉折，結尾另起一行寫：「＊化解之道：……（一句話）」`:''}
@@ -492,7 +508,7 @@ function startDraw(newWorld, continueStory){
   document.getElementById('draw-round').textContent=`第 ${round} 回合`;
   document.getElementById('draw-world').textContent=`✦ ${world}`;
   const dc=document.getElementById('draw-cards');
-  dc.innerHTML=cards.map(()=>`<div class="card-wrap"><div class="card"><div class="card-back"><span class="card-glyph">✦</span></div><div class="card-front"></div></div></div>`).join('');
+  dc.innerHTML=cards.map((_,i)=>`<div class="card-wrap-labeled"><div class="card-wrap"><div class="card"><div class="card-back"><span class="card-glyph">✦</span></div><div class="card-front"></div></div></div><div class="card-role" style="opacity:0" id="draw-role-${i}">${CARD_ROLES[i]}</div></div>`).join('');
   document.getElementById('draw-hint').textContent='命運之牌正在展開……';
   goto('s-draw');
 
@@ -505,6 +521,8 @@ function startDraw(newWorld, continueStory){
       front.innerHTML=`<div class="card-symbol">${c.symbol}</div><div class="card-name">${c.display}</div><div class="card-orient">${c.reversed?'逆位':'正位'}</div>`;
       cardEls[i].classList.add('revealed');
       if(c.reversed) cardEls[i].classList.add('reversed');
+      const roleEl=document.getElementById(`draw-role-${i}`);
+      if(roleEl) roleEl.style.opacity='.7';
       i++;
       setTimeout(revealNext,600);
     } else {
@@ -519,7 +537,7 @@ function startDraw(newWorld, continueStory){
 function showLoading(isEvent){
   document.getElementById('load-round').textContent=isEvent?'⚠️ 重大事件':`第 ${round} 回合`;
   document.getElementById('load-world').textContent=`✦ ${world}`;
-  document.getElementById('load-cards').innerHTML=cards.map(c=>cardHTML(c)).join('');
+  document.getElementById('load-cards').innerHTML=cards.map((c,i)=>cardHTML(c,true,i)).join('');
   document.getElementById('load-msg').textContent='說書人執筆中……';
   goto('s-loading');
 }
@@ -580,7 +598,7 @@ function retryGenerate(){ runGenerate(pendingIsEvent,pendingEc,0); }
 function showStory(isEvent){
   document.getElementById('story-round').textContent=isEvent?'⚠️ 重大事件':`第 ${round} 回合`;
   document.getElementById('story-world').textContent=`✦ ${world}`;
-  document.getElementById('story-cards').innerHTML=cards.map(c=>cardHTML(c)).join('');
+  document.getElementById('story-cards').innerHTML=cards.map((c,i)=>cardHTML(c,true,i)).join('');
   document.getElementById('error-block').style.display='none';
   document.getElementById('action-row').style.display='none';
   document.getElementById('btn-newgame-err').style.display='none';
@@ -603,7 +621,7 @@ function showStory(isEvent){
 function showError(msg){
   document.getElementById('story-round').textContent=isEventStory?'⚠️ 重大事件':`第 ${round} 回合`;
   document.getElementById('story-world').textContent=`✦ ${world}`;
-  document.getElementById('story-cards').innerHTML=cards.map(c=>cardHTML(c)).join('');
+  document.getElementById('story-cards').innerHTML=cards.map((c,i)=>cardHTML(c,true,i)).join('');
   document.getElementById('error-text').textContent=msg;
   document.getElementById('error-block').style.display='block';
   document.getElementById('story-block').style.display='none';
