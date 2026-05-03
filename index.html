@@ -58,66 +58,57 @@ max-width:480px;margin:0 auto;position:relative;
 .btn-prev{background:transparent;color:#6b7fa3;-webkit-text-fill-color:#6b7fa3;border:1px solid rgba(107,127,163,.3);padding:8px 20px;font-family:‘Noto Serif TC’,serif;font-size:12px;border-radius:3px;cursor:pointer;letter-spacing:2px;transition:all .2s;width:100%;max-width:300px;margin:2px 0;-webkit-appearance:none;}
 .btn-prev:active{color:#f5ede0;-webkit-text-fill-color:#f5ede0;border-color:rgba(107,127,163,.6);}
 
-/* ── WORLD BOOK ── */
-#s-world{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);padding:20px 0 60px;align-items:center;overflow:hidden;}
-.book-header{text-align:center;margin-bottom:18px;width:100%;padding:0 16px;}
-.screen-title{font-family:'Cinzel',serif;font-size:22px;color:var(–gold);letter-spacing:4px;margin-bottom:6px;}
-.screen-hint{font-size:13px;color:var(–mist);letter-spacing:2px;}
-.book-outer{width:100%;max-width:420px;padding:0 12px;perspective:1200px;}
-.book-spine{
-  position:relative;
-  background:linear-gradient(160deg,#2b1f12 0%,#1c1309 55%,#2b1f12 100%);
-  border-radius:3px 12px 12px 3px;
-  box-shadow:-4px 0 0 #0d0a06,-7px 0 0 #1a1208,5px 10px 36px rgba(0,0,0,.65),inset 3px 0 10px rgba(201,168,76,.07);
-  overflow:hidden;min-height:380px;transform-style:preserve-3d;
+/* ── WORLD MOON ── */
+#s-world{background:radial-gradient(ellipse at 50% 40%,#1a1030 0%,#0d0a14 80%);justify-content:center;padding:20px 0 40px;}
+.moon-header{text-align:center;margin-bottom:20px;}
+.moon-header-title{font-family:'Cinzel',serif;font-size:18px;color:var(–gold);letter-spacing:5px;margin-bottom:5px;}
+.moon-header-hint{font-size:12px;color:var(–mist);letter-spacing:3px;}
+.moon-ring-area{position:relative;width:300px;height:300px;margin:0 auto;}
+.moon-ring-area svg{position:absolute;inset:0;overflow:visible;}
+.moon-center-orb{
+  position:absolute;top:50%;left:50%;
+  width:106px;height:106px;transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse at 38% 35%,#1e1530 0%,#0b0814 100%);
+  border:1px solid rgba(201,168,76,.2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:10px;pointer-events:none;
 }
-.book-spine::before{
-  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
-  background:repeating-linear-gradient(180deg,transparent 0px,transparent 31px,rgba(201,168,76,.035) 31px,rgba(201,168,76,.035) 32px);
-  pointer-events:none;z-index:0;
+.orb-phase{font-size:9px;color:var(–gold);letter-spacing:2px;opacity:.55;margin-bottom:4px;}
+.orb-name{font-size:11px;color:var(–parchment);letter-spacing:.8px;line-height:1.5;}
+.phase-node{
+  position:absolute;transform:translate(-50%,-50%);
+  cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;
+  -webkit-tap-highlight-color:transparent;
 }
-.book-spine::after{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:20px;
-  background:linear-gradient(90deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.15) 60%,transparent 100%);
-  pointer-events:none;z-index:1;
+.phase-glyph{font-size:28px;line-height:1;transition:filter .3s,transform .25s;}
+.phase-lbl{font-size:8px;color:var(–gold);letter-spacing:1.5px;opacity:.35;transition:opacity .3s;}
+.phase-node.lit .phase-glyph{filter:drop-shadow(0 0 9px rgba(201,168,76,.9));transform:scale(1.12);}
+.phase-node.lit .phase-lbl{opacity:.9;}
+.sat-node{
+  position:absolute;transform:translate(-50%,-50%);
+  cursor:pointer;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(10,8,18,.9);
+  border:1px solid rgba(201,168,76,.22);
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  transition:border-color .2s,background .2s;
 }
-.book-top{
-  position:relative;z-index:2;padding:16px 20px 10px 28px;
-  border-bottom:1px solid rgba(201,168,76,.16);display:flex;align-items:center;gap:10px;
+.sat-node.chosen{border-color:rgba(201,168,76,.9);background:rgba(201,168,76,.12);}
+.sat-node span{font-size:8px;color:var(–parchment);opacity:.85;line-height:1.3;text-align:center;letter-spacing:.3px;padding:0 5px;}
+.moon-enter-btn{
+  margin-top:18px;
+  background:linear-gradient(135deg,#c9a84c,#8a6e32);
+  color:#1a1420 !important;-webkit-text-fill-color:#1a1420 !important;
+  border:none;padding:12px 36px;
+  font-family:'Noto Serif TC',serif;font-size:14px;font-weight:600;
+  border-radius:3px;cursor:pointer;letter-spacing:2px;
+  box-shadow:0 4px 20px rgba(201,168,76,.28);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+  -webkit-appearance:none;
 }
-.book-icon{font-size:17px;opacity:.5;}
-.book-top-text{font-family:'Cinzel',serif;font-size:10px;color:var(–gold);letter-spacing:3px;opacity:.6;}
-.world-entries{position:relative;z-index:2;padding:4px 0;}
-.world-entry{
-  display:flex;align-items:stretch;
-  border-bottom:1px solid rgba(201,168,76,.07);
-  cursor:pointer;-webkit-tap-highlight-color:transparent;
-  position:relative;overflow:hidden;transition:background .15s;
-}
-.world-entry:active{background:rgba(201,168,76,.06);}
-.entry-num{
-  width:42px;min-width:42px;display:flex;align-items:center;justify-content:center;
-  padding:15px 0;font-family:'Cinzel',serif;font-size:9px;
-  color:var(–gold);opacity:.3;letter-spacing:1px;
-  border-right:1px solid rgba(201,168,76,.09);flex-shrink:0;
-}
-.entry-body{flex:1;padding:14px 12px 14px 18px;display:flex;flex-direction:column;justify-content:center;}
-.entry-title{font-family:'Noto Serif TC',serif;font-size:14px;color:var(–parchment);letter-spacing:1.5px;margin-bottom:3px;opacity:.93;}
-.entry-tag{font-size:9.5px;color:var(–mist);letter-spacing:2px;opacity:.5;}
-.entry-arrow{width:34px;display:flex;align-items:center;justify-content:center;color:var(–gold);font-size:11px;opacity:.25;flex-shrink:0;}
-@keyframes pageFlip{
-  0%{transform:rotateY(0deg) translateX(0);filter:brightness(1);}
-  40%{transform:rotateY(-22deg) translateX(-16px);filter:brightness(.65);}
-  60%{transform:rotateY(-22deg) translateX(-16px);filter:brightness(.65);}
-  100%{transform:rotateY(0deg) translateX(0);filter:brightness(1);}
-}
-.book-spine.flipping{animation:pageFlip .5s cubic-bezier(.4,0,.2,1);}
-.book-bottom{
-  position:relative;z-index:2;padding:10px 20px 14px 28px;
-  border-top:1px solid rgba(201,168,76,.1);display:flex;align-items:center;justify-content:space-between;
-}
-.book-page-num{font-family:'Cinzel',serif;font-size:9px;color:var(–gold);opacity:.25;letter-spacing:2px;}
-.book-seal{font-size:13px;opacity:.12;}
+.moon-enter-btn.on{opacity:1;pointer-events:auto;}
 
 /* ── DRAW / LOADING ── */
 #s-draw,#s-loading{justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e1530 0%,#0d0a14 80%);}
@@ -249,23 +240,32 @@ display:none;
 <!-- ══ WORLD ═════════════════════════════════ -->
 
 <div id="s-world" class="screen">
-  <div class="book-header">
-    <p class="screen-title">選擇世界觀</p>
-    <p class="screen-hint">翻開命運之書，加入該舞台</p>
+  <div class="moon-header">
+    <p class="moon-header-title">選擇世界觀</p>
+    <p class="moon-header-hint">點選月相，呼喚你的般台</p>
   </div>
-  <div class="book-outer">
-    <div class="book-spine" id="book-spine">
-      <div class="book-top">
-        <span class="book-icon">&#128214;</span>
-        <span class="book-top-text">WORLD ARCHIVE</span>
-      </div>
-      <div class="world-entries" id="world-entries"></div>
-      <div class="book-bottom">
-        <span class="book-page-num">VOL. I</span>
-        <span class="book-seal">&#10038;</span>
-      </div>
+  <div class="moon-ring-area" id="moonRingArea">
+    <svg id="moonSvg" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="arcGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <circle cx="150" cy="150" r="122" stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+      <g id="moonTicks"></g>
+      <path id="glowArc" fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round" opacity="0" filter="url(#arcGlow)"/>
+      <path id="coreArc" fill="none" stroke="#c9a84c" stroke-width="1.2" stroke-linecap="round" opacity="0"/>
+      <circle id="satOrbitRing" cx="150" cy="150" r="70" stroke="rgba(201,168,76,0)" stroke-width="0.8" stroke-dasharray="2 6" fill="none"/>
+    </svg>
+    <div class="moon-center-orb">
+      <div class="orb-phase" id="orbPhase">月相導航</div>
+      <div class="orb-name" id="orbName">點選外環<br/>月相類別</div>
     </div>
+    <div id="phaseNodes"></div>
+    <div id="satNodes"></div>
   </div>
+  <button class="moon-enter-btn" id="moonEnterBtn">&#36827;&#20837;&#27492;&#19990;&#30028;</button>
 </div>
 <!-- ══ DRAW ═════════════════════════════════════════════════════════ -->
 
@@ -551,33 +551,116 @@ function confirmKey(){
   goto('s-intro');
 }
 
-// ══ WORLD BOOK ═══════════════════════════════════════════════════════════════════════════
-const WORLD_TAGS={
-  '現代都市奇幻':'玄幻・都市','義大利黑手黨':'歷史・暗黑',
-  '耳廓狐與長筒靴貓':'奇幻・冒險','惡魔與偵探':'現代・超自然',
-  '馬戲團小丑及靈媒':'神秘・嘉年華','浪人與蛇妖':'歷史・妖怪',
-  '虎神與鹿神':'神話・東方','蝴蝶妖精':'幻境・童話',
-};
-const we=document.getElementById('world-entries');
-WORLDS.forEach((w,idx)=>{
-  const div=document.createElement('div');
-  div.className='world-entry';
-  const num=String(idx+1).padStart(2,'0');
-  div.innerHTML='<div class="entry-num">'+num+'</div>'
-    +'<div class="entry-body">'
-    +'<div class="entry-title">'+w+'</div>'
-    +'<div class="entry-tag">'+(WORLD_TAGS[w]||'')+'</div>'
-    +'</div>'
-    +'<div class="entry-arrow">›</div>';
-  div.onclick=function(){
-    const spine=document.getElementById('book-spine');
-    spine.classList.remove('flipping');
-    void spine.offsetWidth;
-    spine.classList.add('flipping');
-    setTimeout(function(){ startDraw(w,false); }, 260);
-  };
-  we.appendChild(div);
-});
+// ══ WORLD MOON ══════════════════════════════════════════════════════════════
+const MOON_CATS=[
+  {glyph:'🌑',lbl:'現代',phase:'新月',
+   worlds:['現代都市奇幻','惡魔與偵探']},
+  {glyph:'🌒',lbl:'歷史',phase:'眉月',
+   worlds:['義大利黑手黨','浪人與蛇妖']},
+  {glyph:'🌓',lbl:'神話',phase:'半月',
+   worlds:['虎神與鹿神','蝴蝶妖精']},
+  {glyph:'🌕',lbl:'奇幻',phase:'滿月',
+   worlds:['耳廓狐與長筒靴貓','馬戲團小丑及靈媒']},
+];
+const MCX=150,MCY=150,MOR=122,MSR=70;
+let mActiveCat=-1,mActiveSat=-1,mSatAngle=0,mAnimId=null;
+
+(function buildMoonUI(){
+  // 刻度
+  const tg=document.getElementById('moonTicks');
+  for(let i=0;i<64;i++){
+    const a=i/64*Math.PI*2;
+    const big=i%16===0,med=i%4===0;
+    const r1=big?MOR-9:med?MOR-5:MOR-3;
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1',MCX+MOR*Math.cos(a)); l.setAttribute('y1',MCY+MOR*Math.sin(a));
+    l.setAttribute('x2',MCX+r1*Math.cos(a));  l.setAttribute('y2',MCY+r1*Math.sin(a));
+    l.setAttribute('stroke',`rgba(201,168,76,${big?.2:med?.1:.05})`);
+    l.setAttribute('stroke-width',big?'1.5':med?'1':'0.6');
+    tg.appendChild(l);
+  }
+  // 月相節點
+  const pn=document.getElementById('phaseNodes');
+  MOON_CATS.forEach((c,i)=>{
+    const a=i/MOON_CATS.length*Math.PI*2-Math.PI/2;
+    const x=MCX+MOR*Math.cos(a),y=MCY+MOR*Math.sin(a);
+    const div=document.createElement('div');
+    div.className='phase-node';
+    div.style.left=x+'px'; div.style.top=y+'px';
+    div.innerHTML='<div class="phase-glyph">'+c.glyph+'</div><div class="phase-lbl">'+c.lbl+'</div>';
+    div.onclick=()=>moonSelectCat(i);
+    pn.appendChild(div);
+  });
+  // 進入按鈕
+  document.getElementById('moonEnterBtn').onclick=moonEnter;
+})();
+
+function moonArcPath(a0,a1){
+  const x0=MCX+MOR*Math.cos(a0),y0=MCY+MOR*Math.sin(a0);
+  const x1=MCX+MOR*Math.cos(a1),y1=MCY+MOR*Math.sin(a1);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${MOR} ${MOR} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+
+function moonSelectCat(idx){
+  mActiveCat=idx; mActiveSat=-1;
+  const c=MOON_CATS[idx];
+  document.querySelectorAll('.phase-node').forEach((n,i)=>n.classList.toggle('lit',i===idx));
+  document.getElementById('orbPhase').textContent=c.phase+'・'+c.lbl;
+  document.getElementById('orbName').textContent='選擇世界觀';
+  // 弧
+  const baseA=idx/MOON_CATS.length*Math.PI*2-Math.PI/2;
+  const p=moonArcPath(baseA-.42,baseA+.42);
+  document.getElementById('glowArc').setAttribute('d',p);
+  document.getElementById('glowArc').setAttribute('opacity','0.72');
+  document.getElementById('coreArc').setAttribute('d',p);
+  document.getElementById('coreArc').setAttribute('opacity','1');
+  // 衛星軌道
+  document.getElementById('satOrbitRing').style.stroke='rgba(201,168,76,0.13)';
+  // 清舊衛星
+  document.getElementById('satNodes').innerHTML='';
+  if(mAnimId){cancelAnimationFrame(mAnimId);mAnimId=null;}
+  // 建衛星
+  const satWrap=document.getElementById('satNodes');
+  const sats=[];
+  c.worlds.forEach((w,si)=>{
+    const div=document.createElement('div');
+    div.className='sat-node';
+    const short=w.length>5?w.slice(0,5)+'…':w;
+    div.innerHTML='<span>'+short+'</span>';
+    div.onclick=()=>moonChooseSat(si,w);
+    satWrap.appendChild(div);
+    sats.push(div);
+  });
+  // 入場動畫：衛星從中心飛出
+  sats.forEach(s=>{s.style.opacity='0';s.style.transform='translate(-50%,-50%) scale(0.3)';s.style.transition='opacity .35s,transform .35s';});
+  setTimeout(()=>sats.forEach(s=>{s.style.opacity='1';s.style.transform='translate(-50%,-50%) scale(1)';}),60);
+  // 旋轉
+  mSatAngle=0;
+  (function spin(){
+    mSatAngle+=0.004;
+    sats.forEach((s,si)=>{
+      const a=mSatAngle+si/sats.length*Math.PI*2;
+      s.style.left=(MCX+MSR*Math.cos(a))+'px';
+      s.style.top=(MCY+MSR*Math.sin(a))+'px';
+    });
+    mAnimId=requestAnimationFrame(spin);
+  })();
+  document.getElementById('moonEnterBtn').classList.remove('on');
+}
+
+function moonChooseSat(si,name){
+  mActiveSat=si;
+  document.querySelectorAll('.sat-node').forEach((n,i)=>n.classList.toggle('chosen',i===si));
+  document.getElementById('orbName').textContent=name;
+  document.getElementById('moonEnterBtn').classList.add('on');
+}
+
+function moonEnter(){
+  if(mActiveCat<0||mActiveSat<0) return;
+  const w=MOON_CATS[mActiveCat].worlds[mActiveSat];
+  if(mAnimId){cancelAnimationFrame(mAnimId);mAnimId=null;}
+  startDraw(w,false);
+}
 
 // ══ DRAW SEQUENCE ════════════════════════════════════════════════════════════
 function startDraw(newWorld, continueStory){
