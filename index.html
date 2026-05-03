@@ -45,12 +45,12 @@ max-width:480px;margin:0 auto;position:relative;
 .key-note{font-size:11px;color:var(–mist);opacity:.55;letter-spacing:1px;text-align:center;}
 
 /* ── BUTTONS ── */
-.btn{background:linear-gradient(135deg,var(–gold),var(–gold-dim));color:var(–ink);border:none;padding:14px 36px;font-family:‘Noto Serif TC’,serif;font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 20px rgba(201,168,76,.3);transition:transform .15s,opacity .15s;width:100%;max-width:300px;margin:5px 0;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;}
+.btn{background:#c9a84c;background:linear-gradient(135deg,#c9a84c,#8a6e32);color:#1a1420 !important;-webkit-text-fill-color:#1a1420 !important;border:none;padding:14px 36px;font-family:‘Noto Serif TC’,serif;font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 20px rgba(201,168,76,.3);transition:transform .15s,opacity .15s;width:100%;max-width:300px;margin:5px 0;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;}
 .btn:active{transform:scale(.97);}
 .btn:disabled{opacity:.4;cursor:not-allowed;}
 .btn-ghost{background:transparent;color:#f5ede0;-webkit-text-fill-color:#f5ede0;border:1px solid rgba(245,237,224,.22);padding:12px 28px;font-family:‘Noto Serif TC’,serif;font-size:14px;border-radius:3px;cursor:pointer;letter-spacing:2px;transition:all .2s;width:100%;max-width:300px;margin:5px 0;opacity:.75;-webkit-appearance:none;}
 .btn-ghost:active{opacity:1;background:rgba(255,255,255,.05);}
-.btn-rose{background:linear-gradient(135deg,var(–rose),#5c2a39);color:#f5ede0;-webkit-text-fill-color:#f5ede0;border:none;padding:14px 36px;font-family:‘Noto Serif TC’,serif;font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 24px rgba(139,69,87,.4);transition:transform .15s;width:100%;max-width:300px;margin-top:28px;-webkit-appearance:none;}
+.btn-rose{background:#8b4557;background:linear-gradient(135deg,#8b4557,#5c2a39);color:#f5ede0 !important;-webkit-text-fill-color:#f5ede0 !important;border:2px solid #8b4557;padding:14px 36px;font-family:‘Noto Serif TC’,serif;font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 24px rgba(139,69,87,.4);transition:transform .15s;width:100%;max-width:300px;margin-top:28px;-webkit-appearance:none;}
 .btn-rose:active{transform:scale(.97);}
 .btn-warn{background:rgba(139,69,87,.2);color:#f5ede0;-webkit-text-fill-color:#f5ede0;border:1px solid rgba(139,69,87,.4);padding:9px 22px;font-family:‘Noto Serif TC’,serif;font-size:13px;border-radius:3px;cursor:pointer;letter-spacing:2px;margin:5px 4px;-webkit-appearance:none;}
 
@@ -310,7 +310,17 @@ const RANKS=["A","2","3","4","5","6","7","8","9","10","侍從","騎士","皇后"
 const MINOR=SUITS.flatMap(({s,y})=>RANKS.map(r=>({id:`${s}-${r}`,name:`${r}${s}`,symbol:y,display:`${r}${s}`})));
 const ALL_CARDS=[...MAJOR,...MINOR];
 
-const WORLDS=["現代都市奇幻","義大利黑手黨","耳廓狐與長筒靴貓","惡魔與偵探","馬戲團小丑及靈媒","浪人與蛇妖","虎神與鹿神","蝴蝶妖精"];
+const WORLD_SETTINGS={
+  "現代都市奇幻":"現代都市，魔法與科技並存卻被一般人視而不見。地下世界存在各種超自然存在與人類共生，特定場所在夜晚會向異界開放。兩人在這座城市的某個邊界地帶相遇，一個屬於光，一個屬於影。",
+  "義大利黑手黨":"20世紀中葉的義大利，陽光下是古城風情，暗處是家族恩怨與血誓。兩人同屬地下世界卻立場不同，一人是高調的幫派少主，一人是忠誠的副手，在不知道哪天就會是最後一天的日子裡靠近彼此。",
+  "耳廓狐與長筒靴貓":"童話寓言世界，角色帶有動物特徵但生活在類似人類的社會中。耳廓狐天性好奇愛冒險，出身自郊區，長筒靴貓冷靜機警善謀略，在城中長大，兩人因一場意外的委託成為搭檔，踏上只有他們才能解決的奇異旅程。",
+  "惡魔與偵探":"現代都市，一個是人間行走的惡魔，以交易換取人心欲望；一個是執著真相的偵探，不信任何超自然之物。惡魔原先都在暗中偷偷觀察著偵探，直到因緣際會偵探突然能看見惡魔後，就順勢賴在身邊成為搭檔了。兩人在懸案與謊言中逐漸看清彼此真實的樣子。",
+  "馬戲團小丑及靈媒":"流浪馬戲團遊走各地，白幕後藏著人心與秘密。小丑以笑容示人卻從不被看穿，靈媒通靈卻對自身命運一無所知。在帳篷燈火明滅之間，兩人的命運線悄悄纏繞在一起。",
+  "浪人與蛇妖":"江戶時代末期，戰亂後的山野與城鎮。蛇妖在自己隱居的森林撿到襁褓中的人類孩子，撫養他長大後將他送回了人類世界不告而別。那孩子後來成為流浪的斬殺劍客並一直在尋找曾經幫助過自己的蛇妖。一段人妖之間不該有交集的緣分，卻在某個渡口的傍晚悄然開始。",
+  "虎神與鹿神":"東方神話世界，眾神掌管自然秩序，偶爾以人形降世。掌管干支之一的虎神性烈如火，守護春天的鹿神則溫柔沉靜，依照食物鏈關係鹿神本應該會懼怕虎神，但虎神的執著讓鹿神也不知不覺悄悄動了情，他們相約一起去看人間煙火，花燈流轉。",
+  "蝴蝶妖精":"介於現世與幽界之間的夢境邊境，蝴蝶妖精是兩界的使者，以幻象誘人迷失。故事發生在某個人類誤入其中的夢夜，清醒與沉淪之間，妖精第一次對某個人類產生了不該有的執念。",
+};
+const WORLDS=Object.keys(WORLD_SETTINGS);
 const CHAR_A={name:"月永雷歐",trait:"橘髮綠眸，性格自由奔放，熱情笑容如太陽，擅長作曲、即興發揮，稱呼瀨名泉為セナ，對瀨名泉一見鍾情，通常是主動的一方"};
 const CHAR_B={name:"瀨名泉",trait:"灰髮藍眼，冷靜而自律的傲嬌，性格如貓，外貌出眾，稱呼月永雷歐為れおくん，拿月永雷歐沒轍，拗兩下就會縱容對方，對雷歐有好感但遲鈍"};
 
@@ -377,6 +387,7 @@ function buildPrompt(isEvent,ec){
   return `你是一位擅長寫連載小說的說書人，正在創作一部以塔羅牌為命運線索的故事。
 
 【世界觀】${world}
+【世界觀背景設定】${WORLD_SETTINGS[world]||""}
 【主角】
 - ${CHAR_A.name}：${CHAR_A.trait}
 - ${CHAR_B.name}：${CHAR_B.trait}
