@@ -6,9 +6,6 @@
 <title>命運之書 Tarot Chronicle</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"/>
 <style>
-/* ── 在這裡填入你的 Gemini API Key ── */
-/* 不需要在這裡改，開啟頁面後會有輸入框 */
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --ink:#1a1420;--parchment:#f5ede0;--gold:#c9a84c;--gold-dim:#8a6e32;
@@ -16,7 +13,6 @@
 }
 html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',serif;color:var(--parchment);-webkit-tap-highlight-color:transparent;}
 
-/* ── SCREENS ── */
 .screen{
   display:none;flex-direction:column;align-items:center;
   min-height:100vh;padding:28px 16px 60px;
@@ -26,85 +22,40 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
 
 /* ── INTRO ── */
 #s-intro{justify-content:center;overflow:hidden;}
-.intro-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 30%,#2a1f3d 0%,#0d0a14 70%);
-  z-index:0;
-}
-.intro-bg::before{
-  content:'';position:absolute;inset:0;
-  background-image:radial-gradient(circle,rgba(201,168,76,.07) 1px,transparent 1px);
-  background-size:28px 28px;
-}
+.intro-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,#2a1f3d 0%,#0d0a14 70%);z-index:0;}
+.intro-bg::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(201,168,76,.07) 1px,transparent 1px);background-size:28px 28px;}
 .intro-inner{position:relative;z-index:1;text-align:center;}
 .ornament{color:var(--gold);letter-spacing:12px;font-size:13px;margin-bottom:24px;opacity:.6;}
-.big-title{
-  font-family:'Cinzel',serif;font-size:44px;color:var(--gold);
-  text-shadow:0 0 40px rgba(201,168,76,.6);letter-spacing:6px;margin-bottom:4px;
-}
+.big-title{font-family:'Cinzel',serif;font-size:44px;color:var(--gold);text-shadow:0 0 40px rgba(201,168,76,.6);letter-spacing:6px;margin-bottom:4px;}
 .big-sub{font-size:12px;color:var(--mist);letter-spacing:8px;margin-bottom:36px;}
 .intro-desc{font-size:15px;line-height:2;color:var(--parchment);opacity:.75;margin-bottom:44px;}
 
-/* ── API KEY SCREEN ── */
+/* ── API KEY ── */
 #s-apikey{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);justify-content:center;}
 .apikey-logo{text-align:center;margin-bottom:32px;}
-.apikey-box{
-  width:100%;background:rgba(245,237,224,.04);
-  border:1px solid rgba(201,168,76,.22);border-radius:10px;
-  padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:12px;
-}
+.apikey-box{width:100%;background:rgba(245,237,224,.04);border:1px solid rgba(201,168,76,.22);border-radius:10px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .apikey-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);letter-spacing:3px;}
 .apikey-steps{font-size:13px;color:var(--mist);line-height:2;text-align:left;width:100%;}
 .apikey-steps b{color:var(--parchment);opacity:.9;}
 .apikey-steps a{color:var(--gold);text-decoration:none;}
-.key-input{
-  width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);
-  border-radius:4px;padding:13px 14px;color:var(--parchment);
-  font-family:monospace;font-size:13px;outline:none;transition:border .2s;
-  -webkit-appearance:none;
-}
+.key-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:13px 14px;color:var(--parchment);font-family:monospace;font-size:13px;outline:none;transition:border .2s;-webkit-appearance:none;}
 .key-input:focus{border-color:var(--gold);}
 .key-input::placeholder{opacity:.3;font-family:'Noto Serif TC',serif;}
 .key-note{font-size:11px;color:var(--mist);opacity:.55;letter-spacing:1px;text-align:center;}
 
 /* ── BUTTONS ── */
-.btn{
-  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
-  color:var(--ink);border:none;padding:14px 36px;
-  font-family:'Noto Serif TC',serif;font-size:15px;font-weight:600;
-  border-radius:3px;cursor:pointer;letter-spacing:2px;
-  box-shadow:0 4px 20px rgba(201,168,76,.3);transition:transform .15s,opacity .15s;
-  width:100%;max-width:300px;margin:5px 0;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  -webkit-appearance:none;
-}
+.btn{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:var(--ink);border:none;padding:14px 36px;font-family:'Noto Serif TC',serif;font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 20px rgba(201,168,76,.3);transition:transform .15s,opacity .15s;width:100%;max-width:300px;margin:5px 0;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-appearance:none;}
 .btn:active{transform:scale(.97);}
 .btn:disabled{opacity:.4;cursor:not-allowed;}
-.btn-ghost{
-  background:transparent;color:var(--parchment);
-  border:1px solid rgba(245,237,224,.22);padding:12px 28px;
-  font-family:'Noto Serif TC',serif;font-size:14px;border-radius:3px;
-  cursor:pointer;letter-spacing:2px;transition:all .2s;
-  width:100%;max-width:300px;margin:5px 0;opacity:.75;
-  -webkit-appearance:none;
-}
+.btn-ghost{background:transparent;color:var(--parchment);border:1px solid rgba(245,237,224,.22);padding:12px 28px;font-family:'Noto Serif TC',serif;font-size:14px;border-radius:3px;cursor:pointer;letter-spacing:2px;transition:all .2s;width:100%;max-width:300px;margin:5px 0;opacity:.75;-webkit-appearance:none;}
 .btn-ghost:active{opacity:1;background:rgba(255,255,255,.05);}
-.btn-rose{
-  background:linear-gradient(135deg,var(--rose),#5c2a39);color:var(--parchment);
-  border:none;padding:14px 36px;font-family:'Noto Serif TC',serif;
-  font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;
-  letter-spacing:2px;box-shadow:0 4px 24px rgba(139,69,87,.4);
-  transition:transform .15s;width:100%;max-width:300px;margin-top:28px;
-  -webkit-appearance:none;
-}
+.btn-rose{background:linear-gradient(135deg,var(--rose),#5c2a39);color:var(--parchment);border:none;padding:14px 36px;font-family:'Noto Serif TC',serif;font-size:15px;font-weight:600;border-radius:3px;cursor:pointer;letter-spacing:2px;box-shadow:0 4px 24px rgba(139,69,87,.4);transition:transform .15s;width:100%;max-width:300px;margin-top:28px;-webkit-appearance:none;}
 .btn-rose:active{transform:scale(.97);}
-.btn-warn{
-  background:rgba(139,69,87,.2);color:var(--parchment);
-  border:1px solid rgba(139,69,87,.4);padding:9px 22px;
-  font-family:'Noto Serif TC',serif;font-size:13px;border-radius:3px;
-  cursor:pointer;letter-spacing:2px;margin:5px 4px;
-  -webkit-appearance:none;
-}
+.btn-warn{background:rgba(139,69,87,.2);color:var(--parchment);border:1px solid rgba(139,69,87,.4);padding:9px 22px;font-family:'Noto Serif TC',serif;font-size:13px;border-radius:3px;cursor:pointer;letter-spacing:2px;margin:5px 4px;-webkit-appearance:none;}
+
+/* 前情回顧按鈕 */
+.btn-prev{background:transparent;color:var(--mist);border:1px solid rgba(107,127,163,.3);padding:8px 20px;font-family:'Noto Serif TC',serif;font-size:12px;border-radius:3px;cursor:pointer;letter-spacing:2px;transition:all .2s;width:100%;max-width:300px;margin:2px 0;-webkit-appearance:none;}
+.btn-prev:active{color:var(--parchment);border-color:rgba(107,127,163,.6);}
 
 /* ── WORLD ── */
 #s-world{background:radial-gradient(ellipse at 50% 20%,#1e1530 0%,#0d0a14 80%);}
@@ -112,16 +63,10 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
 .screen-title{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);letter-spacing:4px;margin-bottom:6px;}
 .screen-hint{font-size:13px;color:var(--mist);letter-spacing:2px;}
 .world-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
-.world-btn{
-  background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);
-  color:var(--parchment);padding:18px 8px;
-  font-family:'Noto Serif TC',serif;font-size:14px;letter-spacing:1px;
-  border-radius:4px;cursor:pointer;transition:all .2s;line-height:1.6;
-  -webkit-appearance:none;
-}
+.world-btn{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);color:var(--parchment);padding:18px 8px;font-family:'Noto Serif TC',serif;font-size:14px;letter-spacing:1px;border-radius:4px;cursor:pointer;transition:all .2s;line-height:1.6;-webkit-appearance:none;}
 .world-btn:active{background:rgba(201,168,76,.18);border-color:var(--gold);}
 
-/* ── DRAW ── */
+/* ── DRAW / LOADING ── */
 #s-draw,#s-loading{justify-content:center;background:radial-gradient(ellipse at 50% 40%,#1e1530 0%,#0d0a14 80%);}
 .top-bar{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:8px;}
 .round-badge{font-size:11px;color:var(--gold);border:1px solid var(--gold-dim);padding:4px 12px;letter-spacing:3px;border-radius:2px;}
@@ -136,11 +81,7 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
 .card{width:90px;height:144px;position:relative;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,0,.2,1);}
 .card.revealed{transform:rotateY(180deg);}
 .card.reversed.revealed{transform:rotateY(180deg) rotate(180deg);}
-.card-back,.card-front{
-  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  border-radius:7px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;border:1px solid var(--gold-dim);
-}
+.card-back,.card-front{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--gold-dim);}
 .card-back{background:linear-gradient(145deg,#1e1530,#2a1f3d);}
 .card-glyph{font-size:26px;color:var(--gold);opacity:.22;}
 .card-front{background:linear-gradient(160deg,#f7f0e4,#e8d8c4);transform:rotateY(180deg);color:var(--ink);gap:6px;padding:8px;}
@@ -158,21 +99,29 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
 
 /* ── STORY ── */
 #s-story{background:radial-gradient(ellipse at 50% 10%,#1a1428 0%,#0d0a14 80%);}
-.story-block{
-  background:rgba(245,237,224,.04);border:1px solid rgba(201,168,76,.17);
-  border-radius:8px;padding:20px 16px;margin-bottom:16px;width:100%;min-height:80px;
-}
+.story-block{background:rgba(245,237,224,.04);border:1px solid rgba(201,168,76,.17);border-radius:8px;padding:20px 16px;margin-bottom:16px;width:100%;min-height:80px;}
 .story-text{font-size:15px;line-height:2.2;color:var(--parchment);opacity:.92;white-space:pre-wrap;letter-spacing:.3px;}
 .cursor{display:inline-block;animation:blink .75s step-end infinite;color:var(--gold);margin-left:1px;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .action-row{display:flex;flex-direction:column;align-items:center;width:100%;gap:4px;}
 .round-count{font-size:11px;opacity:.65;font-weight:400;}
 
-/* ── ERROR ── */
-.error-block{
-  width:100%;background:rgba(139,69,87,.1);border:1px solid rgba(139,69,87,.28);
-  border-radius:8px;padding:20px 16px;text-align:center;margin-bottom:14px;
+/* 前情回顧區塊 */
+.prev-story-wrap{width:100%;margin-bottom:10px;}
+.prev-story-block{
+  background:rgba(107,127,163,.06);border:1px solid rgba(107,127,163,.2);
+  border-radius:8px;padding:16px;margin-top:6px;
+  display:none;
 }
+.prev-story-block.open{display:block;}
+.prev-story-label{font-size:11px;color:var(--mist);letter-spacing:3px;margin-bottom:10px;opacity:.8;}
+.prev-entry{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid rgba(107,127,163,.15);}
+.prev-entry:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.prev-entry-round{font-size:10px;color:var(--gold);letter-spacing:3px;opacity:.7;margin-bottom:6px;}
+.prev-entry-text{font-size:13px;line-height:1.9;color:var(--parchment);opacity:.7;white-space:pre-wrap;}
+
+/* ── ERROR ── */
+.error-block{width:100%;background:rgba(139,69,87,.1);border:1px solid rgba(139,69,87,.28);border-radius:8px;padding:20px 16px;text-align:center;margin-bottom:14px;}
 .error-icon{font-size:20px;color:var(--rose);margin-bottom:8px;}
 .error-text{font-size:12px;color:var(--parchment);opacity:.8;line-height:1.9;word-break:break-all;font-family:monospace;}
 .error-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;}
@@ -184,11 +133,20 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
 .event-desc{font-size:14px;line-height:2;color:var(--mist);margin-bottom:32px;}
 
 /* ── END ── */
-#s-end{justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 30%,#1a1428 0%,#0d0a14 80%);}
+#s-end{background:radial-gradient(ellipse at 50% 30%,#1a1428 0%,#0d0a14 80%);}
+.end-header{text-align:center;width:100%;margin-bottom:8px;}
 .end-ornament{font-size:32px;color:var(--gold);margin-bottom:16px;opacity:.45;}
 .end-title{font-family:'Cinzel',serif;font-size:30px;color:var(--gold);letter-spacing:5px;margin-bottom:6px;}
-.end-sub{font-size:12px;color:var(--mist);letter-spacing:3px;margin-bottom:20px;}
-.end-hint{font-size:13px;color:var(--mist);line-height:2.1;margin:20px 0;opacity:.6;}
+.end-sub{font-size:12px;color:var(--mist);letter-spacing:3px;margin-bottom:8px;}
+
+/* 結局劇情整理 */
+.recap-label{font-size:11px;color:var(--gold);letter-spacing:4px;opacity:.7;text-align:center;margin:16px 0 10px;}
+.recap-block{width:100%;display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.recap-entry{background:rgba(245,237,224,.04);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:16px;}
+.recap-entry-round{font-size:10px;color:var(--gold);letter-spacing:3px;margin-bottom:8px;opacity:.8;}
+.recap-entry-text{font-size:13px;line-height:1.95;color:var(--parchment);opacity:.85;white-space:pre-wrap;}
+
+.end-hint{font-size:13px;color:var(--mist);line-height:2.1;margin:8px 0 20px;opacity:.6;text-align:center;}
 
 @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
 </style>
@@ -269,6 +227,16 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
     <span class="world-chip" id="story-world"></span>
   </div>
   <div class="cards-row small" id="story-cards"></div>
+
+  <!-- 前情回顧（第2回合以後才顯示） -->
+  <div class="prev-story-wrap" id="prev-story-wrap" style="display:none">
+    <button class="btn-prev" onclick="togglePrevStory()" id="btn-prev-toggle">▸ 查看前情提要</button>
+    <div class="prev-story-block" id="prev-story-block">
+      <div class="prev-story-label">前情回顧</div>
+      <div id="prev-entries"></div>
+    </div>
+  </div>
+
   <div id="error-block" class="error-block" style="display:none">
     <div class="error-icon">⚠</div>
     <p class="error-text" id="error-text"></p>
@@ -277,9 +245,11 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
       <button class="btn-warn" onclick="goto('s-apikey')">換 Key</button>
     </div>
   </div>
+
   <div id="story-block" class="story-block" style="display:none">
     <p class="story-text" id="story-text"></p>
   </div>
+
   <div id="action-row" class="action-row" style="display:none">
     <button class="btn" id="btn-continue" onclick="handleContinue()">繼續故事</button>
     <button class="btn-ghost" onclick="newGame()">開啟新局</button>
@@ -298,12 +268,16 @@ html,body{min-height:100%;background:var(--ink);font-family:'Noto Serif TC',seri
 
 <!-- ══ END ══════════════════════════════════════════════════════════ -->
 <div id="s-end" class="screen">
-  <div class="end-ornament">✦</div>
-  <h2 class="end-title">故事落幕</h2>
-  <p class="end-sub">命運之書已完成六個篇章</p>
-  <div id="end-story" class="story-block" style="margin-bottom:12px;display:none">
-    <p class="story-text" id="end-story-text"></p>
+  <div class="end-header">
+    <div class="end-ornament">✦</div>
+    <h2 class="end-title">故事落幕</h2>
+    <p class="end-sub" id="end-sub">命運之書已完成篇章</p>
   </div>
+
+  <!-- 劇情整理 -->
+  <div class="recap-label">✦ 命運全記錄 ✦</div>
+  <div class="recap-block" id="recap-block"></div>
+
   <p class="end-hint">月永雷歐與瀨名泉的故事<br/>將繼續在記憶中流轉……</p>
   <button class="btn" onclick="fullReset()">重新開始</button>
 </div>
@@ -338,6 +312,11 @@ let isEventStory=false;
 let eventRevealed=false;
 let pendingIsEvent=false,pendingEc=null;
 let typeTimer=null;
+
+// 新增：儲存所有回合的故事記錄
+// 格式：[{ round, label, story }]
+let storyLog=[];
+let prevStoryOpen=false;
 
 // ══ HELPERS ══════════════════════════════════════════════════════════════════
 function goto(id){
@@ -397,6 +376,40 @@ function typewrite(text, el, onDone){
   tick();
 }
 
+// ══ 前情回顧 ═══════════════════════════════════════════════════════════════
+function togglePrevStory(){
+  prevStoryOpen=!prevStoryOpen;
+  const block=document.getElementById('prev-story-block');
+  const btn=document.getElementById('btn-prev-toggle');
+  block.classList.toggle('open', prevStoryOpen);
+  btn.textContent=prevStoryOpen?'▾ 收合前情提要':'▸ 查看前情提要';
+}
+
+function renderPrevStories(){
+  // 顯示當前回合「之前」的所有記錄
+  const wrap=document.getElementById('prev-story-wrap');
+  const entries=document.getElementById('prev-entries');
+  const block=document.getElementById('prev-story-block');
+  const btn=document.getElementById('btn-prev-toggle');
+
+  // 只顯示前面的記錄（不含本回合）
+  const pastLogs=storyLog.slice(0,-1);
+  if(pastLogs.length===0){ wrap.style.display='none'; return; }
+
+  wrap.style.display='block';
+  // 重置展開狀態
+  prevStoryOpen=false;
+  block.classList.remove('open');
+  btn.textContent='▸ 查看前情提要';
+
+  entries.innerHTML=pastLogs.map(entry=>`
+    <div class="prev-entry">
+      <div class="prev-entry-round">${entry.label}</div>
+      <div class="prev-entry-text">${entry.story}</div>
+    </div>
+  `).join('');
+}
+
 // ══ API KEY ═══════════════════════════════════════════════════════════════════
 document.getElementById('key-input').addEventListener('input',function(){
   document.getElementById('key-confirm').disabled=!this.value.startsWith('AIza');
@@ -426,7 +439,6 @@ function startDraw(newWorld, continueStory){
   if(!continueStory) prevStory='';
   fullStory='';
 
-  // update draw screen
   document.getElementById('draw-round').textContent=`第 ${round} 回合`;
   document.getElementById('draw-world').textContent=`✦ ${world}`;
   const dc=document.getElementById('draw-cards');
@@ -434,7 +446,6 @@ function startDraw(newWorld, continueStory){
   document.getElementById('draw-hint').textContent='命運之牌正在展開……';
   goto('s-draw');
 
-  // reveal cards one by one
   const cardEls=dc.querySelectorAll('.card');
   let i=0;
   function revealNext(){
@@ -505,6 +516,11 @@ async function runGenerate(isEvent, ec, attempt=0){
   if(!text){ showError(`回應格式異常：${JSON.stringify(data).slice(0,200)}`); return; }
 
   fullStory=text;
+
+  // 記錄本回合到 storyLog
+  const label=isEvent?`第 ${round} 回合・重大事件`:`第 ${round} 回合`;
+  storyLog.push({ round, label, story:text });
+
   showStory(isEvent);
 }
 
@@ -519,13 +535,15 @@ function showStory(isEvent){
   document.getElementById('action-row').style.display='none';
   document.getElementById('btn-newgame-err').style.display='none';
 
+  // 渲染前情回顧
+  renderPrevStories();
+
   const sb=document.getElementById('story-block');
   const st=document.getElementById('story-text');
   sb.style.display='block';
   goto('s-story');
 
   typewrite(fullStory, st, ()=>{
-    // update continue button
     const bc=document.getElementById('btn-continue');
     bc.innerHTML=totalRounds<6?`繼續故事　<span class="round-count">${totalRounds}/6</span>`:'故事落幕';
     document.getElementById('action-row').style.display='flex';
@@ -541,6 +559,7 @@ function showError(msg){
   document.getElementById('story-block').style.display='none';
   document.getElementById('action-row').style.display='none';
   document.getElementById('btn-newgame-err').style.display='flex';
+  document.getElementById('prev-story-wrap').style.display='none';
   goto('s-story');
 }
 
@@ -563,12 +582,14 @@ function handleContinue(){
 function newGame(){
   round=0; totalRounds=0; continueCount=0;
   prevStory=''; fullStory=''; eventCard=null;
+  storyLog=[];
   goto('s-world');
 }
 
 function fullReset(){
   round=0; totalRounds=0; continueCount=0; world='';
   prevStory=''; fullStory=''; eventCard=null;
+  storyLog=[];
   goto('s-intro');
 }
 
@@ -594,10 +615,18 @@ function handleEventBtn(){
 
 // ══ END ══════════════════════════════════════════════════════════════════════
 function showEnd(){
-  if(fullStory){
-    document.getElementById('end-story-text').textContent=fullStory;
-    document.getElementById('end-story').style.display='block';
-  }
+  const count=storyLog.length;
+  document.getElementById('end-sub').textContent=`命運之書已完成 ${count} 個篇章`;
+
+  // 渲染全部回合的故事整理
+  const recap=document.getElementById('recap-block');
+  recap.innerHTML=storyLog.map(entry=>`
+    <div class="recap-entry">
+      <div class="recap-entry-round">${entry.label}</div>
+      <div class="recap-entry-text">${entry.story}</div>
+    </div>
+  `).join('');
+
   goto('s-end');
 }
 </script>
